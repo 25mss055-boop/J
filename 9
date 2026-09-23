@@ -1,0 +1,97 @@
+class Shared {
+    int count = 0;
+    boolean available = false;
+
+    synchronized void increment() {
+        count++;
+        System.out.println("Count: " + count);
+    }
+
+    synchronized void produce() {
+        while (available) {
+            try { wait(); } catch (Exception e) {}
+        }
+        System.out.println("Produced");
+        available = true;
+        notify();
+    }
+
+    synchronized void consume() {
+        while (!available) {
+            try { wait(); } catch (Exception e) {}
+        }
+        System.out.println("Consumed");
+        available = false;
+        notify();
+    }
+}
+
+// Thread Class
+class T1 extends Thread {
+    Shared s;
+
+    T1(Shared s) {
+        this.s = s;
+    }
+
+    public void run() {
+        for (int i = 0; i < 3; i++)
+            s.increment();
+    }
+}
+
+// Runnable Interface
+class T2 implements Runnable {
+    Shared s;
+
+    T2(Shared s) {
+        this.s = s;
+    }
+
+    public void run() {
+        for (int i = 0; i < 3; i++)
+            s.produce();
+    }
+}
+
+// Consumer
+class T3 extends Thread {
+    Shared s;
+
+    T3(Shared s) {
+        this.s = s;
+    }
+
+    public void run() {
+        for (int i = 0; i < 3; i++)
+            s.consume();
+    }
+}
+
+public class MultithreadingDemo {
+    public static void main(String[] args) {
+
+        Shared s = new Shared();
+
+        T1 t1 = new T1(s);
+        Thread t2 = new Thread(new T2(s));
+        T3 t3 = new T3(s);
+
+        // Lifecycle: NEW
+        System.out.println("State: " + t1.getState());
+
+        // Thread creation and start
+        t1.start();
+        t2.start();
+        t3.start();
+
+        try {
+            t1.join();
+            t2.join();
+            t3.join();
+        } catch (Exception e) {}
+
+        // Lifecycle: TERMINATED
+        System.out.println("State: " + t1.getState());
+    }
+}
