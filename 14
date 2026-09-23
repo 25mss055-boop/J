@@ -1,0 +1,111 @@
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class Mavenproject8 extends JFrame {
+
+    JLabel l1, l2, l3;
+    JTextField t1, t2;
+    JComboBox<String> course;
+    JButton submit, clear;
+
+    Mavenproject8() {
+
+        setTitle("Student Registration");
+        setSize(400, 400);
+        setLayout(new GridLayout(5, 2, 10, 10));
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        l1 = new JLabel("Name");
+        l2 = new JLabel("Roll No");
+        l3 = new JLabel("Course");
+
+        t1 = new JTextField();
+        t2 = new JTextField();
+
+        String courses[] = {"Python", "C++", "Java"};
+        course = new JComboBox<>(courses);
+
+        submit = new JButton("Submit");
+        clear = new JButton("Clear");
+
+        add(l1);
+        add(t1);
+
+        add(l2);
+        add(t2);
+
+        add(l3);
+        add(course);
+
+        add(submit);
+        add(clear);
+
+        // ActionListener - Anonymous Class
+        submit.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(
+                    null,
+                    "Name: " + t1.getText()
+                    + "\nRoll No: " + t2.getText()
+                    + "\nCourse: " + course.getSelectedItem()
+                );
+            }
+        });
+
+        // Clear button - Anonymous Class
+        clear.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                t1.setText("");
+                t2.setText("");
+                course.setSelectedIndex(0);
+            }
+        });
+
+        // KeyListener - Anonymous Class
+        t2.addKeyListener(new KeyListener() {
+
+            public void keyTyped(KeyEvent e) {
+                System.out.println("Key typed");
+            }
+
+            public void keyPressed(KeyEvent e) {
+                System.out.println("Key pressed");
+            }
+
+            public void keyReleased(KeyEvent e) {
+                System.out.println("Key released");
+            }
+        });
+
+        // MouseListener - Anonymous Class
+        t1.addMouseListener(new MouseListener() {
+
+            public void mouseClicked(MouseEvent e) {
+                System.out.println("Mouse clicked");
+            }
+
+            public void mousePressed(MouseEvent e) {
+                System.out.println("Mouse pressed");
+            }
+
+            public void mouseReleased(MouseEvent e) {
+                System.out.println("Mouse released");
+            }
+
+            public void mouseEntered(MouseEvent e) {
+                System.out.println("Mouse entered");
+            }
+
+            public void mouseExited(MouseEvent e) {
+                System.out.println("Mouse exited");
+            }
+        });
+
+        setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        new Mavenproject8();
+    }
+}
